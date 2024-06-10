@@ -7,6 +7,7 @@ import { Link, router } from 'expo-router'
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import api from '../../api/api'
 import { useGlobalContext } from '../../context/GlobalProvider'
+import * as SecureStore from 'expo-secure-store';
 
 const Login = () => {
     const [form, setForm] = useState({ email: '', password: '' })
@@ -19,6 +20,7 @@ const Login = () => {
                 password: form.password
             })
             const data = response
+            await SecureStore.setItemAsync('userToken', data.data.access_token);
             setUser(data.data.access_token)
             setIsLoggedIn(true)
             router.push('/home')

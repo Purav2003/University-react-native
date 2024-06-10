@@ -1,4 +1,4 @@
-import { Slot, SplashScreen, Stack } from 'expo-router';
+import { Slot, SplashScreen, Stack, router } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
@@ -29,13 +29,13 @@ const RootLayout = () => {
 
     if (!fontsLoaded && !error) {
         return null; // Optionally, you can return a loading spinner or some placeholder
-    }
-
+    }   
     return (
         <GlobalProvider>
             <AlertNotificationRoot>
                 <Stack>
                     <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                     <Stack.Screen name="index" options={{ headerShown: false }} />
                 </Stack>
             </AlertNotificationRoot>

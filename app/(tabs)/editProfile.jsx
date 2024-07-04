@@ -5,6 +5,7 @@ import { useGlobalContext } from '../../context/GlobalProvider.js';
 import api from '../../api/api.js';
 import logout from '../../utils/Logout.js'
 import { Link, router } from 'expo-router';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import FormField from '../../components/FormField.jsx';
 
 const EditProfile = () => {
@@ -35,6 +36,42 @@ const EditProfile = () => {
     };
 
     const handleSubmit = async () => {
+        if(newData.email === data.email && newData.name === data.name && newData.phone === data.phone) {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Warning',
+                textBody: 'No changes made',
+                button: 'Close',
+            })
+            return
+        }
+        if(newData.email === '' || newData.name === '' || newData.phone === '') {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Warning',
+                textBody: 'Please fill all fields',
+                button: 'Close',
+            })
+            return        
+        }
+        if(newData.phone.length !== 10) {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Warning',
+                textBody: 'Phone number should be 10 digits',
+                button: 'Close',
+            })
+            return
+        }
+        if (!/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(newData.email)) {
+            Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'Warning',
+                textBody: 'Invalid email',
+                button: 'Close',
+            });
+            return;
+        }        
         setLoading(true)
         try {
             const response = await api.put('update-profile/', {
@@ -47,10 +84,25 @@ const EditProfile = () => {
                 },
             });
             setData(response.data);
+            Dialog.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Success',
+                textBody: 'Profile updated successfully',
+                button: 'Close',
+            
+            })
             router.replace('/profile?refresh=true')
         } catch (error) {
             if (error.response.status === 401) {
                 logout()
+            }
+            else {
+                Dialog.show({
+                    type: ALERT_TYPE.WARNING,
+                    title: 'Error',
+                    textBody: error.response.data.detail,
+                    button: 'Close',
+                })
             }
             // console.error('Failed to fetch user data:', error, error.response.status);
         }

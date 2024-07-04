@@ -2,14 +2,16 @@
 import { View, Text } from 'react-native';
 import React from 'react';
 import { Tabs } from 'expo-router'; // Removed Redirect import as it's not used
-import Icon from 'react-native-vector-icons/Octicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const TabIcon = ({ icon, color, name, focused }) => (
-  <View className="items-center justify-center gap-2">
-    <Icon name={icon} size={20} color={focused ? '#ff9800' : '#fff'} />
-    <Text className={`text-xs ${focused ? 'font-psemibold' : 'font-pregular'}`} style={{ color: color }}>
-      {name}
-    </Text>
+const TabIcon = ({ icon,focusedIcon ,color, name, focused }) => (
+  <View className={`items-center justify-center  bg-opacity-1 px-2 py-1 rounded-[30px] w-[80px] h-[60px]  ${focused?"bg-[#00b8b83a]":""}`}>    
+  <View className={`w-[60px] text-center items-center justify-center `}>
+    {name !== "Home" ?<Icon name={focused?focusedIcon:icon} size={23} color={focused?'#005f5f':'#000'} />    
+    :<Icons name={focused?focusedIcon:icon} size={23} color={focused?'#005f5f':'#000'} />    }
+  </View>    
+  <Text className={`${focused?"font-bold":""} ${focused?"text-[#005f5f]":"text-black"} text-sm`}>{name}</Text>
   </View>
 );
 
@@ -25,13 +27,14 @@ const TabsLayout = () => {
 
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarActiveTintColor: "#ffa001",
+          tabBarActiveTintColor: "#000",
           tabBarInactiveTintColor: "#cdcde0",
           tabBarStyle: {
-            backgroundColor: "#005f5f",
+            backgroundColor: "#fff",
             borderTopWidth: 1,
-            borderTopColor: "#005f5f",
-            height: 64,
+            borderTopColor: "#fff",
+            height: 68,
+
           },
         }}
       >
@@ -41,7 +44,7 @@ const TabsLayout = () => {
             title: 'Home',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon icon="home" color={color} focused={focused} name="Home" />
+              <TabIcon icon="home-outline" focusedIcon="home" color={color} focused={focused} name="Home" />
             ),
           }}
         />
@@ -51,7 +54,7 @@ const TabsLayout = () => {
             title: 'Profile',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon icon="person" color={color} focused={focused} name="Profile" />
+              <TabIcon icon="person-outline" focusedIcon="person" color={color} focused={focused} name="Profile" />
             ),
           }}
         />
@@ -61,7 +64,7 @@ const TabsLayout = () => {
             title: 'Logout',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <TabIcon icon="sign-out" color={color} focused={focused} name="Logout" />
+              <TabIcon icon="logout" color={color} focused={focused} name="Logout" />
             ),
           }}
         />

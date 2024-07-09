@@ -66,7 +66,7 @@ const Profile = () => {
 
 const ProfileItem = ({ label, value }) => (
     <View className="flex-row items-center py-2">
-        <Text className="text-lg font-psemibold text-gray-700 mr-2">{label}:</Text>
+        <Text className="text-lg font-bold text-gray-700 mr-2">{label}:</Text>
         <Text className="text-lg font-pregular text-gray-600">{value}</Text>
     </View>
 );

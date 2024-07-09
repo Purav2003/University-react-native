@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ActivityIndicator} from 'react-native';
+import { View, Text, Image, ActivityIndicator } from 'react-native';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const UniversityList = ({ universities, loading, totalPage,page,setPage }) => {
+const UniversityList = ({ universities, loading, totalPage, page, setPage }) => {
+    const navigation = useNavigation();
+
     const decreaseCounter = () => {
-        if(page > 1) {
+        if (page > 1) {
             setPage(page - 1)
         }
     }
     const increaseCounter = () => {
-        // if(page < totalPage) {
+        if (page < totalPage) {
             setPage(page + 1)
-        // }
+        }
     }
-    
+
+    const goToDetail = (id) => {
+        navigation.push('details/[query]', { query: id });
+    }
     return (
         <View >
             {loading ? (
@@ -23,26 +29,26 @@ const UniversityList = ({ universities, loading, totalPage,page,setPage }) => {
                 </View>
             ) : (
                 <>
-                    <View className="mt-8">
+                    <View className="mt-8 w-full">
                         {universities.map((university, index) => (
-                            <View key={index} className="mb-4 p-4 rounded-md">
+                            <TouchableOpacity className="w-full p-4" key={index} onPress={() => goToDetail(university?.id)}>
                                 <Image source={{ uri: university.image_url }} className="w-full h-64 mb-2 rounded-md" />
-                                <View className="flex-row justify-between">
+                                <View className="flex-row justify-between w-full">
                                     <Text className="text-xl font-pbold mb-1 max-w-[70%]">{university.name}</Text>
-                                    <Text className="text-lg items-center font-psemibold mb-1">{university.uniReview} <Icons name='star' color="#ff9800" size={20} /></Text>
+                                    <Text className="text-lg items-center font-bold mb-1">{university.uniReview} <Icons name='star' color="#ff9800" size={20} /></Text>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         ))}
                     </View>
                     <View className="mb-32">
                         <View className="flex-row justify-end items-center mt-4 mr-2">
-                            <TouchableOpacity className={`${page == 1 ? "p-2 bg-gray-200 border-gray-100" : "border border-black p-2"}`} onPress={decreaseCounter} disabled={page==1}>
-                                <Icons name="chevron-left" size={35} color={page==1?"#fff":"#000"} />
+                            <TouchableOpacity className={`${page == 1 ? "p-2 border bg-[#00b8b83a] border-[#00b8b83a]" : "border bg-[#005f5f] border-[#005f5f] p-2"}`} onPress={decreaseCounter} disabled={page == 1}>
+                                <Icons name="chevron-left" size={35} color="#fff" />
                             </TouchableOpacity>
                             <Text className="px-6 font-pmedium text-2xl">{page}</Text>
-                            <TouchableOpacity className={`${page == totalPage || !totalPage ? "p-2 bg-gray-200 border-gray-100" : "border border-black p-2"}`} onPress={increaseCounter} disabled={page==totalPage || !totalPage}>
-                                <Icons name="chevron-right" size={35} color={page==totalPage || !totalPage ?"#fff":"#000"}/>
-                                </TouchableOpacity>
+                            <TouchableOpacity className={`${page == totalPage || !totalPage ? "p-2 border bg-[#00b8b83a] border-[#00b8b83a]" : "border border-[#005f5f] bg-[#005f5f] p-2"}`} onPress={increaseCounter} disabled={page == totalPage || !totalPage}>
+                                <Icons name="chevron-right" size={35} color="#fff" />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </>

@@ -152,7 +152,7 @@ const EditProfile = () => {
 const ProfileItem = ({ label, value, field, setNewData, newData }) => {
     return (
         <View className="flex py-2">
-            <Text className="text-lg font-psemibold text-gray-700 mr-2">{label}</Text>
+            <Text className="text-lg font-bold text-gray-700 mr-2">{label}</Text>
             <TextInput value={value} onChangeText={(e) => setNewData({ ...newData, [field]: e })} className="font-pmedium text-lg border border-gray-200 px-2 py-2 min-w-full max-w-full mt-2" />
         </View>
     );

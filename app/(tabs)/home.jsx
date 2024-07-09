@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '../../context/GlobalProvider'
-import { View, Text, Image, ScrollView, RefreshControl, ActivityIndicator } from 'react-native';
+import { View, Text, Image, ScrollView, RefreshControl, ActivityIndicator, Touchable, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchBar from '../../components/SearchBar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,7 +12,7 @@ const Home = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [universities, setUniversities] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [searchItem,setSearchItem] = useState('');
+    const [searchItem, setSearchItem] = useState('');
     const [totalPage, setTotalPage] = useState(1);
     const [page, setPage] = useState(1);
     const fetchUniversities = async () => {
@@ -26,6 +26,7 @@ const Home = () => {
             });
             setUniversities(response.data);
             const items = response.data.map((item) => item.total_universities);
+            console.log(items);
             setTotalPage(Math.ceil(items[0] / 8))
             console.log(items);
             console.log(response.data);
@@ -42,10 +43,10 @@ const Home = () => {
         setRefreshing(false);
     };
 
-    
+
     useEffect(() => {
         fetchUniversities();
-    }, [searchItem,user,page]);
+    }, [searchItem, user, page]);
 
     if (!user) return <View>
         <Text>Loading</Text>
@@ -61,21 +62,30 @@ const Home = () => {
                 </View>
             </View>
             <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-            <View className="px-4">
-                <SearchBar 
-                setSearchItem={setSearchItem}
-                />
-            </View>
-            <View>
-               {user&&universities?.length>0 && <UniversityList
-                    fetchUniversities={fetchUniversities}
-                    universities={universities}
-                    loading={loading}
-                    totalPage={totalPage}
-                    page={page}
-                    setPage={setPage}
-                />}                
-            </View>
+                <View className="px-4">
+                    <SearchBar
+                        setSearchItem={setSearchItem}
+                        searchItem={searchItem}
+                    />
+                </View>
+                <View>
+                    {user && universities?.length > 0 && <UniversityList
+                        fetchUniversities={fetchUniversities}
+                        universities={universities}
+                        loading={loading}
+                        totalPage={totalPage}
+                        page={page}
+                        setPage={setPage}
+                    />}
+                    {
+                        universities?.length === 0 && <View className="items-center justify-center min-h-[70vh] gap-4">
+                            <Text className="font-pmedium text-xl">No Universities Found</Text>
+                            <TouchableOpacity onPress={onRefresh} className="bg-[#005f5f] py-2 px-4 rounded-md mt-4">
+                                <Text className="text-white font-pmedium text-lg">Go Home</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+                </View>
             </ScrollView>
         </SafeAreaView>
     )

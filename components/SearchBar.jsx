@@ -6,7 +6,7 @@ import { useDebounce } from '../utils/useDbounce';
 
 const SearchBar = ({searchItem,setSearchItem}) => {
     const handleTextChange = (e) => {
-    setSearchItem(e)
+        setSearchItem(e)
     }
     return (
         <View className="w-full h-14 px-4 bg-black-100 border border-[#000] mt-2 rounded-lg items-center flex-row">
@@ -14,11 +14,9 @@ const SearchBar = ({searchItem,setSearchItem}) => {
 
             <TextInput
                 placeholder="Enter University Name"
-                value={searchItem}
                 onChangeText={useDebounce(handleTextChange,500)}
                 className="w-full h-full pt-2 flex-1 ml-2 font-pmedium p-0"
-                placeholderTextColor="#7b7b8b"
-
+                placeholderTextColor="#7b7b8b"                                
             />
 
         </View>
